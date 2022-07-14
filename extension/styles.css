@@ -1,4 +1,6 @@
 .plyr__controls__sync {
+    align-items: center;
     background-color: transparent;
-    border: 0px;
+    height: 32px;
+    width: 32px;
 }

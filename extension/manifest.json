@@ -11,10 +11,15 @@
             "all_frames": true
         }
     ],
-    "icons": {"128": "icons/icon.png"},
+    "icons": {
+        "128": "icons/128.png",
+        "48": "icons/48.png",
+        "32": "icons/32.png",
+        "16": "icons/16.png"
+    },
     "web_accessible_resources": [
         {
-            "resources": ["icons/24.png"],
+            "resources": ["icons/18.png"],
             "matches": ["*://plyr.link/*"]
         }
     ]
