@@ -1,11 +1,11 @@
 {
     "name": "Animixplay Sync",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "manifest_version": 3,
     "description": "Browser extension to sync animixplay.to playback with other users",
     "content_scripts": [
         {
-            "js": ["ready.js", "client.js", "init.js"],
+            "js": ["ready.js", "sync.js", "init.js"],
             "matches": ["*://plyr.link/*"],
             "all_frames": true
         }
