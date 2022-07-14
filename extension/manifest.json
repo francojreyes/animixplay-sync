@@ -5,7 +5,7 @@
     "description": "Browser extension to sync animixplay.to playback with other users",
     "content_scripts": [
         {
-            "js": ["init.js"],
+            "js": ["ready.js", "client.js", "init.js"],
             "matches": ["*://plyr.link/*"],
             "all_frames": true
         }
