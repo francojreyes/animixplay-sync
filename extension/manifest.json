@@ -6,8 +6,16 @@
     "content_scripts": [
         {
             "js": ["ready.js", "sync.js", "init.js"],
+            "css": ["styles.css"],
             "matches": ["*://plyr.link/*"],
             "all_frames": true
+        }
+    ],
+    "icons": {"128": "icons/icon.png"},
+    "web_accessible_resources": [
+        {
+            "resources": ["icons/24.png"],
+            "matches": ["*://plyr.link/*"]
         }
     ]
 }

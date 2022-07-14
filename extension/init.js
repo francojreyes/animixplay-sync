@@ -2,11 +2,15 @@
 // Possibly add a popup for sessions
 ready('.plyr__controls', function (controls) {  
     const btn = document.createElement("button");
-    btn.classList.add("plyr__controls__item", "plyr__menu");
-    btn.id = "my-button";
+    btn.classList.add("plyr__controls__item", "plyr__control", "plyr__controls__sync");
     btn.addEventListener('click', () => {
         console.log('button pressed');
         sync();
     });
-    controls.insertBefore(btn, controls.children[1]);
+
+    const img = document.createElement("img");
+    img.src = chrome.runtime.getURL("icons/24.png");
+    btn.appendChild(img);
+
+    controls.prepend(btn);
 });
