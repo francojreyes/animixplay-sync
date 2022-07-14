@@ -1,0 +1,14 @@
+{
+  "name": "animixplay-sync",
+  "version": "1.0.0",
+  "description": "Websocket server to sync animixplay.to clients remotely",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "author": "Franco Reyes",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.8.0"
+  }
+}
