@@ -19,7 +19,12 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["icons/18.png"],
+            "resources": [
+                "icons/pressed.png",
+                "icons/unpressed.png",
+                "icons/pressed.svg",
+                "icons/unpressed.svg"
+            ],
             "matches": ["*://plyr.link/*"]
         }
     ]

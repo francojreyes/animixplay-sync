@@ -1,6 +1,11 @@
-.plyr__controls__sync {
-    align-items: center;
+button.plyr__sync {
     background-color: transparent;
+    padding: 4px;
     height: 32px;
     width: 32px;
+}
+
+img.plyr__sync__img {
+    height: 24px;
+    width: 24px;
 }
