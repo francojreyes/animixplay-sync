@@ -26,6 +26,8 @@ server.on('connection', (socket) => {
     socket.on('message', (msg) => {
         const data = JSON.parse(msg);
         console.log(socket.id, data);
-        server.broadcast(JSON.stringify(data), socket);
+        if (data.type == 'event') {
+            server.broadcast(JSON.stringify(data), socket);
+        }
     });
 });

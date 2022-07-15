@@ -9,7 +9,16 @@ let video;
 function openSocket() {
     if (!socket) {
         socket = new WebSocket('wss://animixplay-sync.herokuapp.com/');
-        socket.addEventListener('close', () => socket = null);
+        socket.ping = setInterval(() => {
+            socket.send(JSON.stringify({
+                type: 'ping',
+                data: null
+            }));
+        }, 30 * 1000);
+        socket.addEventListener('close', () => {
+            clearInterval(socket.ping);
+            socket = null;
+        });
     }
 }
 
