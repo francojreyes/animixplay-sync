@@ -23,7 +23,7 @@ function openSocket() {
 }
 
 function broadcast(event) {
-    openSocket();
+    if (!socket) return;
     const data = {
         type: event.type,
         currentTime: event.target.currentTime
@@ -107,4 +107,10 @@ function sync() {
             fireEvent(data.data);
         }
     });
+}
+
+function unsync() {
+    if (socket) {
+        socket.close();
+    }
 }
