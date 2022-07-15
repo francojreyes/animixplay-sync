@@ -1,4 +1,5 @@
-// Wait until controls are there
+// Wait until controls element is available
+// http://ryanmorr.com/using-mutation-observers-to-watch-for-element-availability/
 (function(window) {
     'use strict';
 
