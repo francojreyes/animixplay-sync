@@ -1,69 +1,101 @@
-const sync = () => {
-    const socket = new WebSocket('wss://animixplay-sync.herokuapp.com/')
-    const video = document.querySelector('video');
-    const player = document.querySelector('div.plyr');
-    const poster = document.querySelector('div.plyr__poster');
-    const button = document.querySelector('button[data-plyr="play"]');
+// Based off Sync Watch
+// https://github.com/Semro/syncwatch/blob/2aa16e42a5bbda122dbfdf1bb133da709aea442e/plugin/js/content.js
+let recieved = false;
+let recievedEvent;
+let loading = false;
+let socket;
+let video;
 
-    // Add listeners for user inputs
-    function sendState(event) {
-        const data = {
-            time: video.currentTime,
-            paused: video.paused  ||
-                    video.readyState < video.HAVE_FUTURE_DATA,
-        }
-        // For some reason these two sources are inverted
-        if (event.target == player || event.target === poster) {
-            data.paused = !data.paused;
-        }
-
-        socket.send(JSON.stringify(data));
+function openSocket() {
+    if (!socket) {
+        socket = new WebSocket('wss://animixplay-sync.herokuapp.com/');
+        socket.addEventListener('close', () => socket = null);
     }
+}
 
-    // All possible event sources - 
-    // - 'click' (button[data-plyr="play"])
-    button.addEventListener('click', sendState);
-    // - 'click' (div.plyr__poster)
-    poster.addEventListener('click', sendState);
-    // - 'keydown' (div.plyr)
-    player.addEventListener('keydown', (event) => {
-        if (event.key == 'k' || event.key == ' ') {
-            sendState(event);
-        }
-    });
-    // - 'waiting i.e. readyState < HAVE_FUTURE_DATA (video)
-    video.addEventListener('waiting', (event) => {
-        if (video.readyState < video.HAVE_FUTURE_DATA) {
-            sendState(event);
-        }
-    });
-    // - 'seeked' (video)
-    video.addEventListener('seeked', sendState);
+function broadcast(event) {
+    openSocket();
+    const data = {
+        type: event.type,
+        currentTime: event.target.currentTime
+    }
+    socket.send(JSON.stringify({
+        type: 'event',
+        data: data,
+    }));
+}
 
-    // Handle incoming messages from server
-    // If we receive data with paused = true, pause and change time
-    // If we receive data with play = true, play
-    function updateState(msg) {
-        const data = JSON.parse(msg);
-        console.log(data);
+function fireEvent(event) {
+    if (!video) return;
+    recieved = true;
+    recievedEvent = event.type;
 
-        // If pause state and times are in sync, continue
-        if (
-            data.paused === video.paused &&
-            Math.abs(data.time - video.currentTime) < 1
-        ) {
-            return;
-        }
+    console.log(event);
 
-        // Invert state, update time if paused
-        if (data.paused) {
-            video.pause();
-            video.currentTime = data.time;
-        } else {
+    switch (event.type) {
+        case 'playing': {
+            video.currentTime = event.currentTime;
             video.play();
+            break;
+        }
+        case 'waiting':
+        case 'pause': {
+            video.pause();
+            video.currentTime = event.currentTime;
+            break;
+        }
+        case 'seeked': {
+            video.currentTime = event.currentTime;
+            break;
         }
     }
-    socket.addEventListener('message', ({ data }) => {
-        updateState(data)
+}
+
+function onProgress(event) {
+    const prevLoading = loading;
+    loading = event.target.readyState < event.target.HAVE_FUTURE_DATA;
+    if (prevLoading === false && loading === true) {
+      broadcast(event);
+    }
+  }
+
+function onEvent(event) {
+    console.log(recieved, event.type);
+    if (recieved) {
+        if (recievedEvent === 'play') {
+            if (event.type === 'progress') {
+                onProgress(event);
+                recieved = false;
+            } else if (event.type === 'playing') {
+                recieved = false;
+            }
+        } else if (recievedEvent === 'pause') {
+            if (event.type === 'seeked') {
+                recieved = false;
+            }
+        } else if (recievedEvent === event.type) {
+            recieved = false;
+        }
+    } else if (event.type === 'seeked') {
+        if (event.target.paused) broadcast(event);
+    } else if (event.type === 'progress') {
+        onProgress(event);
+    } else {
+        broadcast(event);
+    }
+}
+
+function sync() {
+    openSocket();
+    video = document.querySelector('video');
+    const events = ['playing', 'pause', 'seeked', 'progress', 'waiting'];
+    for (const event of events) {
+        video.addEventListener(event, onEvent, true);
+    }
+    socket.addEventListener('message', (msg) => {
+        const data = JSON.parse(msg.data);
+        if (data.type == 'event') {
+            fireEvent(data.data);
+        }
     });
 }
