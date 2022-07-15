@@ -1,5 +1,5 @@
 {
-    "name": "Animixplay Sync",
+    "name": "AniMixSync",
     "version": "0.2.0",
     "manifest_version": 3,
     "description": "Browser extension to sync animixplay.to playback with other users",
