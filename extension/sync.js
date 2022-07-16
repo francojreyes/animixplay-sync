@@ -6,7 +6,7 @@ let socket;
 
 function openSocket() {
     if (!socket) {
-        socket = new WebSocket('wss://animixplay-sync.herokuapp.com/');
+        socket = new WebSocket('wss://animixsync.herokuapp.com/');
         socket.ping = setInterval(() => {
             socket.send(JSON.stringify({
                 type: 'ping',
