@@ -7,7 +7,7 @@
         {
             "js": ["ready.js", "sync.js", "init.js"],
             "css": ["styles.css"],
-            "matches": ["*://plyr.link/*"],
+            "matches": ["*://plyr.link/*", "*://animixplay.to/*"],
             "all_frames": true
         }
     ],
@@ -16,6 +16,16 @@
         "48": "icons/48.png",
         "32": "icons/32.png",
         "16": "icons/16.png"
+    },
+    "action": {
+        "browser_style": true,
+        "default_icon": {
+            "128": "icons/128.png",
+            "48": "icons/48.png",
+            "32": "icons/32.png",
+            "16": "icons/16.png"
+        },
+        "default_title": "AniMixSync"
     },
     "web_accessible_resources": [
         {
